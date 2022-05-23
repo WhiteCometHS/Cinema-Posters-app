@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="Shared/layout"
+      th:with="pageName='add', pageTitle='Dodanie biletu'">
+<body>
+<div layout:fragment="custom-content">
+    <div th:object="${bilet}">
+        <div style="width: 30%;">
+            <form method="post" enctype="multipart/form-data">
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="inputAuthor">Author</label>
+                        <input type="text" class="form-control" name="author" id="inputAuthor" th:field="*{author}" placeholder="Author"/>
+                        <p style="color:red" th:if="${#fields.hasErrors('author')}" th:each="err : ${#fields.errors('author')}" th:text="${err}"></p>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="inputTitle">Original title</label>
+                        <input type="text" class="form-control" name="title" id="inputTitle" th:field="*{title}" placeholder="Original title"/>
+                        <p style="color:red" th:if="${#fields.hasErrors('title')}" th:each="err : ${#fields.errors('title')}" th:text="${err}"></p>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="inputReleaseDate">Release date</label>
+                    <input type="text" class="form-control" name="releaseDate" id="inputReleaseDate" th:field="*{releaseDate}" placeholder="Release date">
+                    <p style="color:red" th:if="${#fields.hasErrors('releaseDate')}" th:each="err : ${#fields.errors('releaseDate')}" th:text="${err}"></p>
+                </div>
+                <div class="form-group">
+                    <label for="inputFormat">Language/Running Time</label>
+                    <input type="text" class="form-control" id="inputFormat" th:field="*{biletFormat}" placeholder="Language;Running Time">
+                    <p style="color:red" th:if="${#fields.hasErrors('biletFormat')}" th:each="err : ${#fields.errors('biletFormat')}" th:text="${err}"></p>
+                </div>
+                <div class="form-group row">
+                    <div class="form-group col-md-6">
+                        <label for="inputPrice">Price</label>
+                        <div th:if="*{price != 0.0}"><input type="text" name="price" class="form-control" id="inputPrice" th:field="*{price}" placeholder="Price"></div>
+                        <div th:if="*{price == 0.0}"><input type="text" name="price" class="form-control" id="inputPrice1" placeholder="Price"></div>
+                        <p style="color:red" th:if="${#fields.hasErrors('price')}" th:each="err : ${#fields.errors('price')}" th:text="${err}"></p>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="inputProduction">Production companies</label>
+                        <select id="inputProduction" class="form-control" th:field="*{producent.id}">
+                            <option value="-1">Choose...</option>
+                            <option th:each="producent:${producenty}" th:value="${producent.id}">
+                                [[${producent.name}]] ([[${producent.country}]])
+                            </option>
+                        </select>
+                        <p style="color:red" th:if="${#fields.hasErrors('producent.id')}" th:each="err : ${#fields.errors('producent.id')}" th:text="${err}"></p>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-sm-2 col-form-label">Gatunki:</label>
+                    <div class="col-sm-10">
+                        <div th:each="genre:${genres}" class="custom-control custom-checkbox">
+                            <input type="checkbox" th:field="*{genres}" th:value="${genre.id}" class="custom-control-input" th:id="${genre.name}">
+                            <label class="custom-control-label" th:for="${genre.name}" th:text="${genre.name}"></label>
+                        </div>
+                        <small style="color:red" th:if="${#fields.hasErrors('genres')}"
+                               th:each="err : ${#fields.errors('genres')}" th:text="${err}"/>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label class="col-sm-2 col-form-label">Dostępne godziny:</label>
+                    <div class="col-sm-10">
+                        <div th:each="t:${times}" class="custom-control custom-checkbox">
+                            <input type="checkbox" th:field="*{times}" th:value="${t.id}" class="custom-control-input" th:id="${t.time}">
+                            <label class="custom-control-label" th:for="${t.time}" th:text="${t.time}"></label>
+                        </div>
+                        <small style="color:red" th:if="${#fields.hasErrors('times')}"
+                               th:each="err : ${#fields.errors('times')}" th:text="${err}"/>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <div class="form-check col-md mr-8 ml-2">
+                            <input class="form-check-input" type="checkbox" id="gridCheck" th:field="*{bestseller}">
+                            <label class="form-check-label" for="gridCheck">
+                                Bestseller
+                            </label>
+                        </div>
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label for="inputAmount">Dostępna ilość</label>
+                        <input type="number" class="form-control" name="releaseDate" id="inputAmount" th:field="*{amount}" placeholder="Amount">
+                        <p style="color:red" th:if="${#fields.hasErrors('amount')}" th:each="err : ${#fields.errors('amount')}" th:text="${err}"></p>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="inputRes">Ograniczenie:</label>
+                    <select id="inputRes" class="form-control" th:field="*{restriction.id}">
+                        <option value="-1">Choose...</option>
+                        <option th:each="restriction:${restrictions}" th:value="${restriction.id}">
+                            [[${restriction.restriction}]]
+                        </option>
+                    </select>
+                    <p style="color:red" th:if="${#fields.hasErrors('restriction.id')}" th:each="err : ${#fields.errors('restriction.id')}" th:text="${err}"></p>
+                </div>
+                <div class="form-group">
+                    <label for="inputType">Typ biletu:</label>
+                    <select id="inputType" class="form-control" th:field="*{type.id}">
+                        <option value="-1">Choose...</option>
+                        <option th:each="type:${types}" th:value="${type.id}">
+                            [[${type.name}]]
+                        </option>
+                    </select>
+                    <p style="color:red" th:if="${#fields.hasErrors('type.id')}" th:each="err : ${#fields.errors('type.id')}" th:text="${err}"></p>
+                </div>
+                <div th:if="${spec!=null}"><input type="hidden" name="id" class="form-control" th:field="*{id}"></div>
+                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+                <div th:if="*{fileName != null}">
+                    <p th:text="*{fileName}"></p>
+                    <img th:src="${'/img/'+bilet.fileName}" style="max-height: 110px">
+                </div>
+                <input type="file" name="multipartFile" accept=".gif,.png,.jpeg,.jpg">
+                <button type="submit" class="btn btn-primary">Confirm</button>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="Shared/layout"
+      th:with="pageName='error', pageTitle='Co poszło nie tak'" xmlns:sec="http://www.w3.org/1999/xhtml">
+
+<body>
+<div layout:fragment="custom-content">
+    <div>
+        <h1>404 - Nie ma takiego biletu</h1>
+        <div th:object="${exception}">
+            <table class="table w-auto ">
+                <tbody>
+                <tr>
+                    <th scope="row">Wyjątek:</th>
+                    <td th:text="${exception.message}"></td>
+                </tr>
+                <tr>
+                    <th scope="row">URL żądania:</th>
+                    <td th:text="${url}"></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <a href="../">Powrót do strony głównej</a>
+</div>
+</body>
+</html>

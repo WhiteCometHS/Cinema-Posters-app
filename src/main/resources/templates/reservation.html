@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="Shared/layout"
+      th:with="pageName='reservation', pageTitle='Lista rezerwacji'" xmlns:sec="http://www.w3.org/1999/xhtml">
+<body>
+<div layout:fragment="custom-content">
+  <table border="1" class="table">
+    <tr>
+      <th style="width: 400px;">Title</th>
+      <th style="width: 400px;">Author</th>
+      <th>releaseDate</th>
+      <th style="width: 50px;">Price</th>
+      <th>Language/Running Time</th>
+      <th style="width: 50px;">Producent</th>
+      <th style="width: 50px;">Czas rozpoczęcia</th>
+      <th>Additional</th>
+    </tr>
+    <div >
+      <tr th:each="list, set : ${bilets}">
+        <td th:text="${list.key.title}"></td>
+        <td th:text="${list.key.author}"></td>
+        <td th:text="${list.key.releaseDate}"></td>
+        <td th:text="${list.key.price}"></td>
+        <td>[[${list.key.biletFormat.language}]]/[[${list.key.biletFormat.runningTime}]]</td>
+        <td th:text="${list.key.producent.name}"></td>
+        <td th:text="${list.value.time}"></td>
+        <td>
+          <a class="btn btn-primary" th:href="@{/deleteRes(id=${list.key.id}, id_time=${list.value.id})}">Zwróć bilet</a>
+          <a class="btn btn-primary" th:href="@{/exportPDF(id=${list.key.id}, id_time=${list.value.id})}">Wydrukuj bilet</a>
+        </td>
+      </tr>
+    </div>
+    <tr th:if="${bilets.isEmpty()}">
+      <td colspan="8" style="text-align: center;">Brak elementów na liście</td>
+    </tr>
+  </table>
+</div>
+</body>
+</html>

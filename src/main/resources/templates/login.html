@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="Shared/layout"
+      th:with="pageName='login', pageTitle='Strona logowania'"
+>
+<body>
+<div layout:fragment="custom-content">
+  <div th:if="${spec!=null}">
+    <h2 th:if="${spec==true}">Udana rejestracja</h2>
+    <h2 th:if="${spec==false}">Coś poszło nie tak</h2>
+  </div>
+
+  <div th:if="${param.error}">
+    Invalid username and password.
+  </div>
+  <div th:if="${param.logout}">
+    You have been logged out.
+  </div>
+  <form th:action="@{/login}" method="post">
+    <div>
+      <input type="text" name="username" placeholder="Username"/>
+    </div>
+    <div>
+      <input type="password" name="password" placeholder="Password"/>
+    </div>
+    <input type="submit" value="Log in"/>
+  </form>
+
+</div>
+</body>
+</html>

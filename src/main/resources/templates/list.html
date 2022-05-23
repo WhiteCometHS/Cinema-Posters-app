@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="Shared/layout"
+      th:with="pageName='list', pageTitle='Lista biletów'" xmlns:sec="http://www.w3.org/1999/xhtml">
+<body>
+<div layout:fragment="custom-content">
+  <form method="post" th:object="${biletFilter}">
+    <div class="form-group row">
+      <div class="col-md-2">
+        <input type="text" name="phrase" th:field="*{phrase}" class="form-control" id="title" placeholder="Wpisz frazę do wyszukania">
+        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+        <label for="inputProduction">Production companies</label>
+        <select id="inputProduction" class="form-control" name="producent">
+          <option value="-1">Choose...</option>
+          <option th:each="producent:${producenty}" th:value="${producent.name}">
+            [[${producent.name}]] ([[${producent.country}]])
+          </option>
+        </select>
+        <div class="form-row">
+          <div class="form-group col-md-6">
+            <label for="inputPrice">Price min:</label>
+            <input type="text" name="Min" class="form-control" id="inputPrice" th:field="*{Min}" placeholder="Min">
+            <p style="color:red" th:if="${#fields.hasErrors('Min')}" th:each="err : ${#fields.errors('Min')}" th:text="${err}"></p>
+          </div>
+          <div class="form-group col-md-6">
+            <label for="inputPrice1">Price max:</label>
+            <input type="text" name="Max" class="form-control" id="inputPrice1" th:field="*{Max}" placeholder="Max">
+            <p style="color:red" th:if="${#fields.hasErrors('Max')}" th:each="err : ${#fields.errors('Max')}" th:text="${err}"></p>
+            </div>
+        </div>
+<!--        <div class="form-row">-->
+<!--          <div class="form-group col-md-6">-->
+<!--            <label for="inputDate">Date min:</label>-->
+<!--            <input type="text" name="dateMin" class="form-control" id="inputDate" th:field="*{dateMin}" placeholder="Min">-->
+<!--            <p style="color:red" th:if="${#fields.hasErrors('dateMin')}" th:each="err : ${#fields.errors('dateMin')}" th:text="${err}"></p>-->
+<!--          </div>-->
+<!--          <div class="form-group col-md-6">-->
+<!--            <label for="inputDate1">Date max:</label>-->
+<!--            <input type="text" name="dateMax" class="form-control" id="inputDate1" th:field="*{dateMax}" placeholder="Max">-->
+<!--            <p style="color:red" th:if="${#fields.hasErrors('dateMax')}" th:each="err : ${#fields.errors('dateMax')}" th:text="${err}"></p>-->
+<!--          </div>-->
+<!--        </div>-->
+      </div>
+      <div class="col-md-3">
+        <button type="submit" class="btn btn-success">Wyszukaj</button>
+        <a href="list" class="btn btn-warning">Wyczyść</a><br>
+        <div>
+          <label class="col-form-label">Gatunki</label>
+            <div th:each="genre:${genres}" class="custom-control custom-checkbox">
+              <input type="checkbox" th:field="*{biletGenres}" th:value="${genre.id}" class="custom-control-input" th:id="${genre.name}">
+              <label class="custom-control-label" th:for="${genre.name}" th:text="${genre.name}"></label>
+            </div>
+        </div>
+      </div>
+    </div>
+  </form>
+<table border="1" class="table">
+  <tr>
+    <th style="width: 400px;">Title</th>
+    <th style="width: 400px;">Author</th>
+    <th>releaseDate</th>
+    <th style="width: 50px;">Price</th>
+    <th>Language/Running Time</th>
+    <th style="width: 50px;">Typ biletu</th>
+    <th style="width: 50px;">Poster</th>
+    <th>Additional</th>
+  </tr>
+  <tr th:each="temp : ${bilets}" th:object="${temp}">
+    <td th:text="*{title}" style="width: 400px;"></td>
+    <td th:text="*{author}" style="width: 400px;"></td>
+    <td th:text="${#temporals.format(temp.releaseDate, 'dd-MM-yyyy')}"></td>
+    <td th:text="${#numbers.formatDecimal(temp.price,2,2,'COMMA')}"></td>
+    <td>[[*{biletFormat.language}]]/[[*{biletFormat.runningTime}]]</td>
+    <td th:text="*{type.name}" style="width: 400px;"></td>
+    <div th:if="*{fileName != null}">
+      <td><img class="small_img" th:src="${'/img/'+temp.fileName}"></td>
+    </div>
+    <div th:if="*{fileName == null}">
+      <td><img class="small_img" th:src="${'/img/no_photo.jpg'}"></td>
+    </div>
+    <td>
+      <div sec:authorize="hasRole('ADMIN')" th:if="*{editable == true}"><a class="btn btn-primary" th:href="@{/form(id=*{id})}">Edytuj</a></div>
+      <div sec:authorize="hasRole('ADMIN')" th:if="*{editable == true}"><a class="btn btn-primary" th:href="@{/delete(id=*{id})}">Usuń</a></div>
+
+      <div sec:authorize="hasRole('USER')"><a class="btn btn-primary" th:href="@{/additional(id=*{id})}">Szczególy</a></div>
+    </td>
+  </tr>
+  <tr th:if="${bilets.isEmpty()}">
+    <td colspan="8">Brak elementów na liście</td>
+  </tr>
+</table>
+</div>
+</body>
+</html>

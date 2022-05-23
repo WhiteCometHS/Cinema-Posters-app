@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="Shared/layout"
+      th:with="pageName='home', pageTitle='Strona głowna'">
+<body>
+<div layout:fragment="custom-content">
+    <h2 th:if="${reg!=null}">Wiadomość została wysłana</h2>
+    <img src="images/1567179827-5qab.jpg" class="rounded img-fluid mx-auto d-block main" alt="Responsive image">
+</div>
+</body>
+</html>

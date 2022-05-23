@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="shared/layout"
+      th:with="pageName='registration', pageTitle='Rejestracja użytkownika'"
+>
+<body>
+<div layout:fragment="custom-content">
+    <div class="hero-unit">
+        <form th:method="POST" th:object="${user}">
+            <div class="form-group">
+                <div>
+                    <input type="text" name="username" placeholder="Username"/>
+                    <p class="alert alert-danger" th:if="${#fields.hasErrors('username')}" th:each="err : ${#fields.errors('username')}" th:text="${err}"></p>
+                </div>
+                <div>
+                    <input type="text" name="email" placeholder="Email"/>
+                    <p class="alert alert-danger" th:if="${#fields.hasErrors('email')}" th:each="err : ${#fields.errors('email')}" th:text="${err}"></p>
+                </div>
+                <div>
+                    <input type="password" name="password" placeholder="Password"/>
+                    <p class="alert alert-danger" th:if="${#fields.hasErrors('password')}" th:each="err : ${#fields.errors('password')}" th:text="${err}"></p>
+                </div>
+                <div>
+                    <input type="password" name="passwordConfirm" placeholder="Confirm password"/>
+                    <p class="alert alert-danger" th:if="${#fields.hasErrors('passwordConfirm')}" th:each="err : ${#fields.errors('passwordConfirm')}" th:text="${err}"></p>
+                </div>
+                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+                <input type="submit" value="Zarejestruj się"/>
+            </div>
+        </form>
+    </div>
+</div>
+</body>
+</html>

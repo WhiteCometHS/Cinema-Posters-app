@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html
+        lang="en"
+        xmlns:th="http://www.thymeleaf.org"
+        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+  <div th:replace="Shared/SharedElements :: header-css"/>
+  <meta charset="UTF-8">
+  <title>[[${pageTitle}]]</title>
+</head>
+<body>
+<div layout:replace="~{Shared/SharedElements :: menu(${pageName})}"></div>
+<div>
+  <h1>[[${pageTitle}]]</h1>
+  <div layout:fragment="custom-content">A ta treść zostanie zastąpiona</div>
+</div>
+<div th:replace="Shared/SharedElements :: footer"></div>
+</body>
+</html>
